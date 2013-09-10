@@ -28,3 +28,8 @@
         total-cards (count cards)
         total-days  (days-spanned cards)]
     (/ total-cards total-days)))
+
+(defn cycle-time
+  "Returns the cycle time for a board given the done column name and the wip limit"
+  [board done-column wip]
+  (/ wip (cards-per-day board done-column)))

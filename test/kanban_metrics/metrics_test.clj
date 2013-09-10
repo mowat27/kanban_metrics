@@ -30,3 +30,5 @@
   (cards-per-day board2 :dev) => 1
   (cards-per-day board2 :live) => (/ 6 4))
 
+(fact (cycle-time board2 :live 2) => (/ 2 (/ 6 4)))
+
