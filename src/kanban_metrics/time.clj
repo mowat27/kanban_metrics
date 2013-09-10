@@ -12,7 +12,6 @@
   [& coll]
   (reduce #(if (t/after? %1 %2) %1 %2) coll))
 
-
 (defn days-spanned
   "Returned the number of days spanned by a list of dates"
   [cards]

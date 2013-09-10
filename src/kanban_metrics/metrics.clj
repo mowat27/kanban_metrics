@@ -1,7 +1,6 @@
 (ns kanban-metrics.metrics
   (:require [kanban-metrics.time :refer :all]))
 
-
 (defn get-column
   "Returns the values from a column on the board"
   [[columns data] column]
@@ -22,9 +21,7 @@
 (defn cards-per-day
   "Counts the average number of cards going into a column per day"
   [board column]
-  (let [cards (->> (get-column board column)
-                   (parse-dates "dd/MM")
-                   vec)
+  (let [cards       (get-column board column)
         total-cards (count cards)
         total-days  (days-spanned cards)]
     (/ total-cards total-days)))

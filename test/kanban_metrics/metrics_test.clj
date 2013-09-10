@@ -1,7 +1,7 @@
 (ns kanban-metrics.metrics-test
   (:require [midje.sweet :refer :all]
-            [kanban-metrics.metrics :refer :all]
-            [clj-time.core  :as t]))
+            [kanban-metrics.board :as board]
+            [kanban-metrics.metrics :refer :all]))
 
 (def kanban-board
   [[:requests  :dev   :live]
@@ -18,13 +18,14 @@
                                    :live     {"3/6" 1  "2/6" 1}})
 
 (def board2
-  [[:dev  :live]
-   ["1/6" "9/6"
-    "2/6" "9/6"
-    "3/6" "11/6"
-    "4/6" "11/6"
-    "5/6" "12/6"
-    "6/6" "12/6"]])
+  (let [f (board/prepper {:datetime-format "dd/MM"})]
+    (f [[:dev  :live]
+        ["1/6" "9/6"
+         "2/6" "9/6"
+         "3/6" "11/6"
+         "4/6" "11/6"
+         "5/6" "12/6"
+         "6/6" "12/6"]])))
 
 (facts "about cards-per-day"
   (cards-per-day board2 :dev) => 1
