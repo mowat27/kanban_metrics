@@ -6,3 +6,8 @@
   (fn [[columns data]]
     [columns
      (parse-dates (args :datetime-format) data)]))
+
+(defn prepare
+  [args board]
+  (let [f (prepper args)]
+    (f board)))

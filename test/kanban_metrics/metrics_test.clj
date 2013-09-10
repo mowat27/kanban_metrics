@@ -18,14 +18,15 @@
                                    :live     {"3/6" 1  "2/6" 1}})
 
 (def board2
-  (let [f (board/prepper {:datetime-format "dd/MM"})]
-    (f [[:dev  :live]
-        ["1/6" "9/6"
-         "2/6" "9/6"
-         "3/6" "11/6"
-         "4/6" "11/6"
-         "5/6" "12/6"
-         "6/6" "12/6"]])))
+  (board/prepare
+    {:datetime-format "dd/MM"}
+    [[:dev  :live]
+     ["1/6" "9/6"
+      "2/6" "9/6"
+      "3/6" "11/6"
+      "4/6" "11/6"
+      "5/6" "12/6"
+      "6/6" "12/6"]]))
 
 (facts "about cards-per-day"
   (cards-per-day board2 :dev) => 1
