@@ -15,8 +15,8 @@
   ([board]
     (let [[columns data] board]
       (reduce #(merge %1 {%2 (counts-by-day board %2)}) {} columns)))
-  ([baord column]
-    (frequencies (get-column baord column))))
+  ([board column]
+    (frequencies (get-column board column))))
 
 (defn cards-per-day
   "Counts the average number of cards going into a column per day"
