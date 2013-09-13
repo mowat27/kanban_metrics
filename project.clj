@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [clj-time "0.6.0"]
                  [incanter "1.5.4"]]
-  :profiles {:dev {:dependencies [[midje "1.5.1"]]}})
+  :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
+  :main kanban-metrics.core/main)
