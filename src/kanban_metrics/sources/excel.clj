@@ -41,13 +41,13 @@
 
 (defn ->board [xls]
   (let [cols (all-cols xls)]
-    (vector (symbolize cols)
-            (->> (map #(get-all % cols) xls)
-                 (map #(vec (vals %)))
-                 (apply concat)
-                 vec))))
+    (vector
+      (symbolize cols)
+      (apply concat (map #(get-all % cols) xls)))))
 
 (defn load-excel-file [file sheet]
   (let [xls  (load-sheet file sheet)
         cols (all-cols xls)]
     (->board (filter #(complete? cols %) xls))))
+
+
