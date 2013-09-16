@@ -21,8 +21,6 @@
 (defn format-row [row]
   (into {} (for [[col value] row] [col (format-cell value)])))
 
-(def file "/Users/adrianmowat/temp/green_team_metrics.xlsx")
-
 (defn symbolize [coll]
   (vec
     (map #(keyword (str/lower-case (str/replace % #"\s+" "-"))) coll)))
