@@ -21,3 +21,14 @@
   "Parses a sequence of strings into dates"
   [dt-format coll]
   (map #(fmt/parse (fmt/formatter dt-format) %) coll))
+
+(defn ->datetime
+  "Converts a java.util.Date to a org.joda.time.DateTime
+  as used by clj-time"
+  [date]
+  (t/date-time (+ 1900 (.getYear date))
+             (.getMonth date)
+             (.getDay date)
+             (.getHours date)
+             (.getMinutes date)
+             (.getSeconds date)))

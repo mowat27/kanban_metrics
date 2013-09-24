@@ -2,16 +2,9 @@
   (:require [incanter.core :refer :all]
             [incanter.excel :refer :all]
             [clojure.string :as str]
-            [clj-time.core :refer [date-time]])
+            [kanban-metrics.time :refer [->datetime]])
   (:import  java.text.SimpleDateFormat
             java.util.Date))
-
-(defn ->datetime [date]
-  (date-time (+ 1900 (.getYear date))
-             (.getMonth date)
-             (.getDay date)
-             (.getHours date)
-             (.getMinutes date)))
 
 (defmulti format-cell class)
 (defmethod format-cell Date     [date] (->datetime date))
