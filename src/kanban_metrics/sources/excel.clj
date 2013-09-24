@@ -6,15 +6,15 @@
   (:import  java.text.SimpleDateFormat
             java.util.Date))
 
-(defn ->date-time [date]
-  (date-time (.getYear date)
+(defn ->datetime [date]
+  (date-time (+ 1900 (.getYear date))
              (.getMonth date)
              (.getDay date)
              (.getHours date)
              (.getMinutes date)))
 
 (defmulti format-cell class)
-(defmethod format-cell Date     [date] (->date-time date))
+(defmethod format-cell Date     [date] (->datetime date))
 (defmethod format-cell String   [s]    (if-not (str/blank? s) s))
 (defmethod format-cell :default [x]    x)
 
