@@ -1,0 +1,32 @@
+[
+ ;; card
+ {:db/id #db/id[:db.part/db]
+  :db/ident :card/sequence
+  :db/valueType :db.type/long
+  :db/cardinality :db.cardinality/one
+  :db/doc "A card's sequence number"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :card/project
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "The project to which the card refers"
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :card/work-item-type
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "The type of work - feature, bug etc"
+  :db/fulltext true
+  :db.install/_attribute :db.part/db}
+
+ {:db/id #db/id[:db.part/db]
+  :db/ident :card/description
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "Description of the task"
+  :db/fulltext true
+  :db.install/_attribute :db.part/db}
+]

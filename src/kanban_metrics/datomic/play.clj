@@ -1,6 +1,5 @@
 (ns kanban-metrics.datomic.play
-  (:use
-        [clojure.test]))
+  (:use [clojure.test]))
 
 (use '[datomic.api :only [q db] :as d])
 (use 'clojure.pprint)
