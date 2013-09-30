@@ -26,9 +26,10 @@
   "Converts a java.util.Date to a org.joda.time.DateTime
   as used by clj-time"
   [date]
-  (t/date-time (+ 1900 (.getYear date))
-             (.getMonth date)
-             (.getDay date)
-             (.getHours date)
-             (.getMinutes date)
-             (.getSeconds date)))
+  (t/date-time
+    (+ 1900 (.getYear date))
+    (.getMonth date)
+    (.getDay date)
+    (.getHours date)
+    (.getMinutes date)
+    (.getSeconds date)))
