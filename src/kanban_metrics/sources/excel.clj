@@ -40,5 +40,3 @@
   (let [xls  (load-sheet file sheet)
         cols (all-cols xls)]
     (->board (filter #(complete? cols %) xls))))
-
-
