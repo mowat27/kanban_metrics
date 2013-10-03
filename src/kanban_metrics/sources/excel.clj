@@ -1,6 +1,5 @@
 (ns kanban-metrics.sources.excel
-  (:require [incanter.core :refer :all]
-            [incanter.excel :refer :all]
+  (:require [incanter.excel :refer :all]
             [clojure.string :as str]
             [kanban-metrics.time :refer [->datetime]])
   (:import  java.text.SimpleDateFormat

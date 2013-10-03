@@ -10,8 +10,12 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [clj-time "0.6.0"]
                  [incanter "1.5.4"]
-                 [com.datomic/datomic-free "0.8.4159"]]
+                 [com.datomic/datomic-free "0.8.4159"]
+                 [ring/ring-jetty-adapter "1.1.6"]
+                 [hiccup "1.0.4"]
+                 [compojure "1.1.5"]]
   :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
-  :main kanban-metrics.core)
-
-
+  :main kanban-metrics.web.core
+  :ring {
+    :handler kanban-metrics.web.core/app
+    :auto-reload? true})
