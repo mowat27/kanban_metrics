@@ -6,6 +6,9 @@
           [:h1 "A Kanban Board"]
           [:table
             [:thead
-              [:tr (for [c columns] [:th c])]]
-            [:tbody ]]
-          [:p cards]]))
+              [:tr
+                (for [c columns] [:th c])]]
+            [:tbody]
+              (for [card cards]
+                [:tr
+                  (for [col columns] [:td (col card)])])]]))

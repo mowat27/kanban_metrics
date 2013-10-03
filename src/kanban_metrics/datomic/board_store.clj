@@ -34,5 +34,8 @@
   (d/transact conn
     (map #(->trxn (prep-row %1 mappings) %2) (open-excel-file file sheet) (range))))
 
-(defn do-query [query]
-  (q query (d/db conn)))
+(defn do-query
+  ([query]
+    (q query (d/db conn)))
+  ([query & params]
+    (apply q query (d/db conn) params)))
