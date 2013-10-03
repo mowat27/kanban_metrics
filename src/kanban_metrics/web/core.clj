@@ -19,14 +19,25 @@
               :in $ ?id
               :where [?id ?a ?value] [?a :db/ident ?attr]] id))
 
-(defn home-page [request]
-  (board/show (columns) (->> (card-ids)
-                             (map card)
-                             (map #(into {} %)))))
+(defn cards [ids]
+  (->> ids
+       (map #(into {} (card %)))
+       (sort-by :card/sequence)))
 
+(def ordered-columns [:card/sequence
+                      :card/project
+                      :card/work-item-type
+                      :card/description
+                      :card/requested
+                      :card/backlog
+                      :card/in-progress
+                      :card/qa
+                      :card/uat
+                      :card/done])
 
 (defroutes app
-  (GET "/" [] home-page))
+  (GET "/"     [] (board/show ordered-columns (cards (card-ids))))
+  (GET "/list" [] (board/list-cards ordered-columns (cards (card-ids)))))
 
 (defn -main [port]
   (run-jetty #'app {:port (Integer. port) :join? false}))
