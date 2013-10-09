@@ -1,7 +1,8 @@
 (ns kanban-metrics.web.views.board
   (:require [hiccup.core :refer [html]]
             [kanban-metrics.datomic.board-store :refer [do-query cards card-ids]]
-            [clj-time.format :refer [formatters parse]]))
+            [clj-time.core :as t]
+            [clj-time.format :refer [formatters formatter parse unparse]]))
 
 (defn header-row [columns]
   [:thead
@@ -46,19 +47,25 @@
   (-> (select-keys card meta-columns)
       (assoc :card/current (last (get-columns-for-date card date)))))
 
+(defn add-to-column [m [col card]]
+  (assoc m col (conj (m col []) card)))
 
 (defn show [columns cards dt]
-  (let [today          (.toDate (parse (formatters :date) dt))
-        todays-cards   (->> all-cards
-                            (map #(vector (last (get-columns-for-date % today)) %)))
+  (let [target-date    (parse (formatters :date) dt)
+        todays-cards   (->> cards
+                            (map #(vector (last (get-columns-for-date % (.toDate target-date))) %)))
         cards-on-board (filter (fn [[col card]] (not (nil? col))) todays-cards)
-        cards-by-col   (reduce (fn [m [col card]] (assoc m col (conj (m col []) card))) {} cards-on-board)
+        cards-by-col   (reduce add-to-column {} cards-on-board)
         cards-in-cols  (map #(vector % (cards-by-col % [])) date-columns)
         rows           (->> cards-in-cols
                             (map #(pad (last %) (count date-columns)))
                             (apply mapv vector))]
     (html [:body
-            [:h1 "Kanban Board"]
+            [:h1 (str "Kanban Board on " dt)]
+            [:ul
+              [:li [:a {:href (str "/on/" (unparse (formatters :date) (t/minus target-date (t/days 1))))} "Previous Day"]]
+              [:li [:a {:href (str "/on/" (unparse (formatters :date) (t/plus target-date   (t/days 1))))} "Next Day"]]
+              [:li [:a {:href (str "/on/" (unparse (formatters :date) (t/today-at 0 0)))} "Today"]]]
             [:table
               (header-row columns)
               [:tbody
@@ -66,3 +73,5 @@
                 [:tr
                   (for [card row]
                       [:td (get card :card/description "")])])]]])))
+
+
