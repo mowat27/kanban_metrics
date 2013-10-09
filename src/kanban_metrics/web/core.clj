@@ -16,7 +16,8 @@
                       :card/done])
 
 (defroutes app
-  (GET "/"     [] (board/show board/date-columns (cards (card-ids))))
+  (GET "/"     [] (board/show board/date-columns (cards (card-ids)) "2013-07-05"))
+  (GET "/on/:dt"  {{dt :dt} :params} (board/show board/date-columns (cards (card-ids)) dt))
   (GET "/list" [] (board/list-cards ordered-columns (cards (card-ids)))))
 
 (defn -main [port]
