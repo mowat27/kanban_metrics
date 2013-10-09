@@ -39,3 +39,23 @@
     (q query (d/db conn)))
   ([query & params]
     (apply q query (d/db conn) params)))
+
+(defn columns []
+  (map first
+    (do-query '[:find ?column :where [?n :card/sequence]
+                                     [?n ?a]
+                                     [?a :db/ident ?column]
+                                     [(not= :db/txInstant ?column)]])))
+
+(defn card-ids []
+  (map first (do-query '[:find ?card :where [?card :card/sequence]])))
+
+(defn card [id]
+  (do-query '[:find ?attr ?value
+              :in $ ?id
+              :where [?id ?a ?value] [?a :db/ident ?attr]] id))
+
+(defn cards [ids]
+  (->> ids
+       (map #(into {} (card %)))
+       (sort-by :card/sequence)))

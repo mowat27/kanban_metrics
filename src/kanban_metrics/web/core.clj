@@ -2,27 +2,7 @@
   (:require [ring.adapter.jetty :refer :all]
             [compojure.core :refer :all]
             [kanban-metrics.web.views.board :as board]
-            [kanban-metrics.datomic.board-store :refer [conn do-query]]))
-
-(defn columns []
-  (map first
-    (do-query '[:find ?column :where [?n :card/sequence]
-                                     [?n ?a]
-                                     [?a :db/ident ?column]
-                                     [(not= :db/txInstant ?column)]])))
-
-(defn card-ids []
-  (map first (do-query '[:find ?card :where [?card :card/sequence]])))
-
-(defn card [id]
-  (do-query '[:find ?attr ?value
-              :in $ ?id
-              :where [?id ?a ?value] [?a :db/ident ?attr]] id))
-
-(defn cards [ids]
-  (->> ids
-       (map #(into {} (card %)))
-       (sort-by :card/sequence)))
+            [kanban-metrics.datomic.board-store :refer [conn do-query cards card-ids]]))
 
 (def ordered-columns [:card/sequence
                       :card/project
