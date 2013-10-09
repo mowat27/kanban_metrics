@@ -50,10 +50,13 @@
 (defn add-to-column [m [col card]]
   (assoc m col (conj (m col []) card)))
 
+(defn assign-column [target-date card]
+  [(last (get-columns-for-date card (.toDate target-date)))
+   card])
+
 (defn show [columns cards dt]
   (let [target-date    (parse (formatters :date) dt)
-        todays-cards   (->> cards
-                            (map #(vector (last (get-columns-for-date % (.toDate target-date))) %)))
+        todays-cards   (map #(assign-column target-date %) cards)
         cards-on-board (filter (fn [[col card]] (not (nil? col))) todays-cards)
         cards-by-col   (reduce add-to-column {} cards-on-board)
         cards-in-cols  (map #(vector % (cards-by-col % [])) date-columns)
@@ -64,8 +67,8 @@
             [:h1 (str "Kanban Board on " dt)]
             [:ul
               [:li [:a {:href (str "/on/" (unparse (formatters :date) (t/minus target-date (t/days 1))))} "Previous Day"]]
-              [:li [:a {:href (str "/on/" (unparse (formatters :date) (t/plus target-date   (t/days 1))))} "Next Day"]]
-              [:li [:a {:href (str "/on/" (unparse (formatters :date) (t/today-at 0 0)))} "Today"]]]
+              [:li [:a {:href (str "/on/" (unparse (formatters :date) (t/plus target-date  (t/days 1))))} "Next Day"]]
+              [:li [:a {:href (str "/on/" (unparse (formatters :date) (t/today-at 0 0)))}                 "Today"]]]
             [:table
               (header-row columns)
               [:tbody
@@ -73,5 +76,3 @@
                 [:tr
                   (for [card row]
                       [:td (get card :card/description "")])])]]])))
-
-
