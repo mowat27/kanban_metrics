@@ -56,9 +56,10 @@
 
 (defn show [columns cards dt]
   (let [target-date    (parse (formatters :date) dt)
-        todays-cards   (map #(assign-column target-date %) cards)
-        cards-on-board (filter (fn [[col card]] (not (nil? col))) todays-cards)
-        cards-by-col   (reduce add-to-column {} cards-on-board)
+        cards-by-col   (->> cards
+                            (map #(assign-column target-date %))
+                            (filter (fn [[col card]] (not (nil? col))))
+                            (reduce add-to-column {}))
         cards-in-cols  (map #(vector % (cards-by-col % [])) date-columns)
         rows           (->> cards-in-cols
                             (map #(pad (last %) (count date-columns)))

@@ -16,3 +16,26 @@
   (prepper {:datetime-format "dd/MM"}))
 
 (fact (prep board) => [(first board) expected-rows])
+
+
+(def monday    (.toDate (t/date-time 2013 9 7)))
+(def tuesday   (.toDate (t/date-time 2013 9 8)))
+(def wednesday (.toDate (t/date-time 2013 9 9)))
+(def thursday  (.toDate (t/date-time 2013 9 10)))
+(def friday    (.toDate (t/date-time 2013 9 11)))
+
+(def columns [:backlog, :dev, :done])
+(def card1 {:backlog monday,
+            :dev tuesday,
+            :done wednesday})
+
+(def card2 {:backlog monday,
+            :dev tuesday,
+            :done wednesday})
+
+
+(facts "about finding the state of a board on a date"
+  (board-on-date [card1] monday)  => {:backlog [card1], :dev [nil], :done [nil]}
+  (board-on-date [card1 card2] tuesday) => {:backlog [nil], :dev [card1 card2], :done [nil]}
+  )
+
