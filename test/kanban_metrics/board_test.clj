@@ -17,7 +17,6 @@
 
 (fact (prep board) => [(first board) expected-rows])
 
-
 (def monday    (.toDate (t/date-time 2013 9 7)))
 (def tuesday   (.toDate (t/date-time 2013 9 8)))
 (def wednesday (.toDate (t/date-time 2013 9 9)))
@@ -44,11 +43,38 @@
 
 (def my-columns-on-date (partial columns-on-date [:backlog :dev :done]))
 
-(fact (reverse-map 1 #{:x :y}) =>   [:y 1 :x 1])
-(fact (reverse-map [1 #{:x :y}]) => [:y 1 :x 1])
-
 (facts "about finding the state of a board on a date"
-  (board-on-date my-columns-on-date monday  [card1] )  => {:backlog [card1]}
-  (board-on-date my-columns-on-date tuesday [card1 card2] ) => {:backlog [nil], :dev [card1 card2], :done [nil]}
-  )
+  (board-on-date my-columns-on-date monday  [card1])  => {:backlog [card1]}
+  (board-on-date my-columns-on-date tuesday [card1 card2]) => {:dev [card1 card2]})
+
+(fact (get-cards [:x]    {:x [1 2] :y [3 4]}) => [[1 2]])
+(fact (get-cards [:y :x] {:x [1 2] :y [3 4]}) => [[3 4] [1 2]])
+(fact (get-cards [:z]    {:x [1 2] :y [3 4]}) => [[]])
+(fact (get-cards [:x :z] {:x [1 2] :y [3 4]}) => [[1 2] []])
+
+(fact (pad [1 2] 3)     => [1 2 nil])
+(fact (pad [1 2] 3 "x") => [1 2 "x"])
+
+(fact (get-cards-padded [:x :y] {:x [1] :y [2]}) => [[1] [2]])
+(fact (get-cards-padded [:x :z] {:x [1] :y [2]}) => [[1] [nil]])
+(fact (get-cards-padded [:x]    {:x [1 2]}) => [[1 2]])
+
+(facts "about converting a column hash to a matrix"
+  (map-to-matrix [:x] {:x [1]}) => [[:x]
+                                    [ 1]]
+  (map-to-matrix [:x] {:x [1 2]}) => [[:x]
+                                       [1]
+                                       [2]]
+  (map-to-matrix [:x :y] {:x [1 2] :y [3 4]})  => [[:x :y]
+                                                   [ 1  3]
+                                                   [ 2  4]]
+  (map-to-matrix [:y :x] {:x [1 2] :y [3 4]})  => [[:y :x]
+                                                   [ 3  1]
+                                                   [ 4  2]]
+  (map-to-matrix [:x :y] {:x [1] :y [3 4]})    => [[:x  :y]
+                                                   [ 1   3]
+                                                   [ nil 4]]
+  (map-to-matrix [:x :y :z] {:x [1] :y [3 4]}) => [[:x  :y :z]
+                                                   [ 1   3  nil]
+                                                   [ nil 4  nil]])
 
