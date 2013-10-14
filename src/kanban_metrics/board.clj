@@ -13,8 +13,21 @@
   (let [f (prepper args)]
     (f board)))
 
-(defn board-on-date [cards target-dt]
-  (let [card (first cards)]
-    (reduce #(if (= target-dt (get card %2))
-                      (assoc %1 %2 cards)
-                      (assoc %1 %2 [nil])) {} (keys card))))
+(defn columns-on-date [ordered-cols card target-date]
+  (let [last-column (last ordered-cols)
+        last-date   (get card last-column)]
+    (if (.after target-date last-date)
+        #{last-column}
+        (set (filter #(= target-date (get card %)) ordered-cols)))))
+
+(defn reverse-map
+  ([[x coll]]
+    (reverse-map x coll))
+  ([x coll]
+    (interleave coll (repeat x))))
+
+(defn board-on-date [f target-date cards]
+  (let [ card-dates (map #(vector % (f % target-date)) cards)
+         reversals  (map #(reverse-map %) card-dates)]
+    (apply hash-map (reduce concat reversals))))
+

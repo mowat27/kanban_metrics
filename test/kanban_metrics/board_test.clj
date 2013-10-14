@@ -33,9 +33,22 @@
             :dev tuesday,
             :done wednesday})
 
+(def card3 {:backlog tuesday,
+            :dev tuesday,
+            :done tuesday})
+
+(fact (columns-on-date [:backlog :dev :done] card1 monday)    => #{:backlog} )
+(fact (columns-on-date [:backlog :dev :done] card3 monday)    => #{} )
+(fact (columns-on-date [:backlog :dev :done] card3 tuesday)   => #{:dev :backlog :done} )
+(fact (columns-on-date [:backlog :dev :done] card3 wednesday) => #{:done} )
+
+(def my-columns-on-date (partial columns-on-date [:backlog :dev :done]))
+
+(fact (reverse-map 1 #{:x :y}) =>   [:y 1 :x 1])
+(fact (reverse-map [1 #{:x :y}]) => [:y 1 :x 1])
 
 (facts "about finding the state of a board on a date"
-  (board-on-date [card1] monday)  => {:backlog [card1], :dev [nil], :done [nil]}
-  (board-on-date [card1 card2] tuesday) => {:backlog [nil], :dev [card1 card2], :done [nil]}
+  (board-on-date my-columns-on-date monday  [card1] )  => {:backlog [card1]}
+  (board-on-date my-columns-on-date tuesday [card1 card2] ) => {:backlog [nil], :dev [card1 card2], :done [nil]}
   )
 
