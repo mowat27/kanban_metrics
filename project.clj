@@ -15,7 +15,6 @@
                  [hiccup "1.0.4"]
                  [compojure "1.1.5"]]
   :profiles {:dev {:dependencies [[midje "1.5.1"]]}}
-  :main kanban-metrics.web.core
   :ring {
     :handler kanban-metrics.web.core/app
     :auto-reload? true})
